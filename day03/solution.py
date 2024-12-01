@@ -1,8 +1,10 @@
+from pathlib import Path
+
 class Solution:
 
     def __init__(self, input_path: str):
         self.input_path = input_path
-        self.data = self._process_input()
+        self.lines = self._process_input()
 
     def _process_input(self):
         with open(self.input_path) as input:
@@ -33,3 +35,10 @@ class Solution:
         """
 
         return 0
+    
+
+input_path = Path(__file__).parent / "input.txt"
+solution = Solution(input_path)
+
+print(f"Solution to part 1: {solution.part1()}")
+print(f"Solution to part 2: {solution.part2()}")
