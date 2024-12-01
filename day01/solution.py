@@ -24,8 +24,6 @@ class Solution:
         """
         left_list, right_list = [], []
 
-        total = 0
-
         for line in self.lines:
             left, right = line.split()
             left_list.append(int(left))
@@ -34,9 +32,7 @@ class Solution:
         left_list.sort()
         right_list.sort()
 
-        for left, right in zip(left_list, right_list):
-            difference = abs(right - left)
-            total += difference
+        total = sum([abs(right - left) for right, left in zip(left_list, right_list)])
 
         return total
 
@@ -51,19 +47,16 @@ class Solution:
         """
 
         left_list, right_list = [], []
-
-        total = 0
-
         for line in self.lines:
             left, right = line.split()
             left_list.append(int(left))
             right_list.append(int(right))
 
-        counted_values = Counter(right_list)
+        value_count = {}
+        for value in right_list:
+            value_count[value] = value_count.get(value, 0) + 1
 
-        for n in left_list:
-            if n in counted_values:
-                total += n * counted_values[n]
+        total = sum(n * value_count.get(n, 0) for n in left_list)
 
         return total
 
