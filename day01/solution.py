@@ -3,7 +3,6 @@ from collections import Counter
 
 
 class Solution:
-
     def __init__(self, input_path: str):
         self.input_path = input_path
         self.lines = self._process_input()
@@ -23,15 +22,14 @@ class Solution:
         Returns:
             int | str: The answer to part 1.
         """
-        left_list = []
-        right_list = []
+        left_list, right_list = [], []
 
         total = 0
 
         for line in self.lines:
-            line = line.split()
-            left_list.append(int(line[0]))
-            right_list.append(int(line[1]))
+            left, right = line.split()
+            left_list.append(int(left))
+            right_list.append(int(right))
 
         left_list.sort()
         right_list.sort()
@@ -52,21 +50,20 @@ class Solution:
             int | str: The answer to part 2.
         """
 
-        left_list = []
-        right_list = []
+        left_list, right_list = [], []
 
         total = 0
 
         for line in self.lines:
-            line = line.split()
-            left_list.append(int(line[0]))
-            right_list.append(int(line[1]))
+            left, right = line.split()
+            left_list.append(int(left))
+            right_list.append(int(right))
 
         counted_values = Counter(right_list)
 
         for n in left_list:
             if n in counted_values:
-                total += (n * counted_values[n])
+                total += n * counted_values[n]
 
         return total
 
