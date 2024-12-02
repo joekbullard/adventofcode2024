@@ -21,6 +21,7 @@ class Solution:
         Returns:
             int | str: The answer to part 1.
         """
+        
 
         return 0
 
