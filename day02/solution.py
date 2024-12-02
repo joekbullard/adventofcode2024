@@ -2,7 +2,6 @@ from pathlib import Path
 
 
 class Solution:
-
     def __init__(self, input_path: str):
         self.input_path = input_path
         self.lines = self._process_input()
@@ -15,25 +14,21 @@ class Solution:
 
     @staticmethod
     def _check_safety(digits: list[int]) -> bool:
-        safe = True
 
-        for d in range(len(digits) - 1):
+        delta = digits[1] - digits[0]
+        if 1 <= delta <= 3:
+            expected = (1, 2, 3)
+        elif -3 <= delta <= -1:
+            expected = (-3, -2, -1)
+        else:
+            return False
 
-            delta = digits[d] - digits[d + 1]
-            if d == 0:
-                if 1 <= delta <= 3:
-                    expected = range(1, 4)
-                    continue
-                elif -3 <= delta < 0:
-                    expected = range(-3, 0)
-                    continue
-                else:
-                    safe = False
-                    break
+        for d in range(1, len(digits) - 1):
+            delta = digits[d + 1] - digits[d]
             if delta not in expected:
-                safe = False
-                break
-        return safe
+                return False
+
+        return True
 
     def part1(self) -> int | str:
         """Solves part 1 of the challenge using the provided input.
