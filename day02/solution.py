@@ -14,7 +14,15 @@ class Solution:
 
     @staticmethod
     def _check_safety(digits: list[int]) -> bool:
+        """Iterates over list of ints to determine if list is safe
+        or not
 
+        Args:
+            digits (list[int]): List of integers to check for safety
+
+        Returns:
+            bool: if safe then returns True, else False
+        """
         delta = digits[1] - digits[0]
         if 1 <= delta <= 3:
             expected = (1, 2, 3)
