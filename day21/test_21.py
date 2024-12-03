@@ -1,6 +1,6 @@
 from pathlib import Path
 import pytest
-from solution import Solution
+from .solution import Solution
 
 
 @pytest.mark.skip(reason="Function not implemented yet")

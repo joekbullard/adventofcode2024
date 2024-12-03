@@ -1,7 +1,5 @@
-import pytest
 from pathlib import Path
-from solution import Solution
-
+from day02.solution import Solution
 
 def test_part1():
     input_path = Path(__file__).parent / 'example.txt'

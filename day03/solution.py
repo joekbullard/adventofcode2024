@@ -1,4 +1,5 @@
 from pathlib import Path
+import re
 
 class Solution:
 
@@ -21,8 +22,16 @@ class Solution:
         Returns:
             int | str: The answer to part 1.
         """
+        total = 0
+        expression = "mul\(\d{1,3},\d{1,3}\)"
+        for line in self.lines:
+            matches = re.findall(expression, line)
 
-        return 0
+            for m in matches:
+                val_1, val_2 = m[4:-1].split(',')
+                total += int(val_1) * int(val_2)
+
+        return total
 
     def part2(self) -> int | str:
         """Solves part 2 of the challenge using the provided input.
@@ -33,8 +42,29 @@ class Solution:
         Returns:
             int | str: The answer to part 2.
         """
+        concat_line = []
+        for line in self.lines:
+            concat_line.extend(line)
 
-        return 0
+        string_line = ''.join(concat_line)
+
+        sections_pattern = r"^.*?don't\(\)|do\(\).*?don't\(\)|do\(\).*$"
+        sections = re.findall(sections_pattern, string_line)
+
+        # Step 2: Extract all mul(x, y) patterns from each section
+        mul_pattern = r"mul\(\d{1,3},\d{1,3}\)"
+        total = 0
+        for section in sections:
+            matches = re.findall(mul_pattern, section)
+            for m in matches:
+                val_1, val_2 = m[4:-1].split(',')
+                total += int(val_1) * int(val_2)
+        
+        return total
+    
+            
+
+
     
 
 input_path = Path(__file__).parent / "input.txt"

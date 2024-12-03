@@ -1,4 +1,4 @@
-from solution import Solution
+from day01.solution import Solution
 from pathlib import Path
 
 
