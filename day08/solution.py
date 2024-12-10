@@ -1,4 +1,6 @@
 from pathlib import Path
+from itertools import combinations
+from typing import Tuple
 
 class Solution:
 
@@ -11,6 +13,13 @@ class Solution:
             lines = input.read().splitlines()
 
         return lines
+    
+    def _calc_diff(self, coord_a: Tuple[int, int], coord_b: Tuple[int, int]) -> Tuple[Tuple[int, int], Tuple[int, int]]:
+        y_diff = coord_a[0] - coord_b[0]
+        x_diff = coord_a[1] - coord_b[1]
+        upper = (coord_a[0] + y_diff, coord_a[1] + x_diff)
+        lower = (coord_b[0] - y_diff, coord_b[1] - x_diff)
+        return upper, lower
 
     def part1(self) -> int | str:
         """Solves part 1 of the challenge using the provided input.
@@ -22,7 +31,31 @@ class Solution:
             int | str: The answer to part 1.
         """
 
-        return 0
+        hash_table = {}
+
+        for y, row in enumerate(self.lines):
+            for x, char in enumerate(row):
+                if char != '.':
+                    
+                    if char in hash_table:
+                        hash_table[char].append((y, x))
+                    else:
+                        hash_table[char] = [(y, x)]
+
+        values = [list(combinations(value, 2)) for value in hash_table.values()]
+
+        antinodes = []
+
+        for val in values:
+            for coord_pairs in val:
+                coord_1, coord_2 = coord_pairs
+                upper, lower = self._calc_diff(coord_1, coord_2)
+                if 0 <= upper[0] < 50 and 0 <= upper[1] < 50:
+                    antinodes.append(upper)
+                if 0 <= lower[0] < 50 and 0 <= lower[1] < 50:
+                    antinodes.append(lower)
+
+        return len(set(antinodes))
 
     def part2(self) -> int | str:
         """Solves part 2 of the challenge using the provided input.
