@@ -2,6 +2,7 @@ from pathlib import Path
 from itertools import combinations
 from typing import Tuple
 
+
 class Solution:
 
     def __init__(self, input_path: str):
@@ -13,13 +14,13 @@ class Solution:
             lines = input.read().splitlines()
 
         return lines
-    
-    def _calc_diff(self, coord_a: Tuple[int, int], coord_b: Tuple[int, int]) -> Tuple[Tuple[int, int], Tuple[int, int]]:
+
+    def _calc_diff(
+        self, coord_a: Tuple[int, int], coord_b: Tuple[int, int]
+    ) -> Tuple[int, int]:
         y_diff = coord_a[0] - coord_b[0]
         x_diff = coord_a[1] - coord_b[1]
-        upper = (coord_a[0] + y_diff, coord_a[1] + x_diff)
-        lower = (coord_b[0] - y_diff, coord_b[1] - x_diff)
-        return upper, lower
+        return (y_diff, x_diff)
 
     def part1(self) -> int | str:
         """Solves part 1 of the challenge using the provided input.
@@ -35,8 +36,8 @@ class Solution:
 
         for y, row in enumerate(self.lines):
             for x, char in enumerate(row):
-                if char != '.':
-                    
+                if char != ".":
+
                     if char in hash_table:
                         hash_table[char].append((y, x))
                     else:
@@ -49,10 +50,16 @@ class Solution:
         for val in values:
             for coord_pairs in val:
                 coord_1, coord_2 = coord_pairs
-                upper, lower = self._calc_diff(coord_1, coord_2)
-                if 0 <= upper[0] < 50 and 0 <= upper[1] < 50:
+                y_diff, x_diff = self._calc_diff(coord_1, coord_2)
+                upper = (coord_1[0] + y_diff, coord_1[1] + x_diff)
+                lower = (coord_2[0] - y_diff, coord_2[1] - x_diff)
+                if 0 <= upper[0] < len(self.lines) and 0 <= upper[1] < len(
+                    self.lines[0]
+                ):
                     antinodes.append(upper)
-                if 0 <= lower[0] < 50 and 0 <= lower[1] < 50:
+                if 0 <= lower[0] < len(self.lines) and 0 <= lower[1] < len(
+                    self.lines[0]
+                ):
                     antinodes.append(lower)
 
         return len(set(antinodes))
@@ -67,8 +74,38 @@ class Solution:
             int | str: The answer to part 2.
         """
 
-        return 0
-    
+        hash_table = {}
+
+        for y, row in enumerate(self.lines):
+            for x, char in enumerate(row):
+                if char != ".":
+                    if char in hash_table:
+                        hash_table[char].append((y, x))
+                    else:
+                        hash_table[char] = [(y, x)]
+
+        values = [list(combinations(value, 2)) for value in hash_table.values()]
+
+        antinodes = []
+
+        size = len(self.lines)
+
+        for val in values:
+            for coord_pairs in val:
+                coord_a, coord_b = coord_pairs
+
+                y_diff, x_diff = self._calc_diff(coord_a, coord_b)
+
+                while any(0 <= value < size for value in coord_a + coord_b):
+                    if 0 <= coord_a[0] < size and 0 <= coord_a[1] < size:
+                        antinodes.append(coord_a)
+                    if 0 <= coord_b[0] < size and 0 <= coord_b[1] < size:
+                        antinodes.append(coord_b)
+                    coord_a = (coord_a[0] + y_diff, coord_a[1] + x_diff)
+                    coord_b = (coord_b[0] - y_diff, coord_b[1] - x_diff)
+
+        return len(set(antinodes))
+
 
 input_path = Path(__file__).parent / "input.txt"
 solution = Solution(input_path)
